@@ -2,6 +2,7 @@ package org.launchcode.techjobs.console;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -38,7 +39,15 @@ public class TechJobs {
                 String columnChoice = getUserSelection("List", columnChoices);
 
                 if (columnChoice.equals("all")) {
-                    printJobs(JobData.findAll());
+
+                    ArrayList<HashMap<String,String>>allresult = JobData.findAll();
+                    for (Map<String,String>entry:allresult){
+                        System.out.println("\n*****");
+                        for (String key :entry.keySet()){
+                            String value=entry.get(key);
+                            System.out.println(key+':'+value);
+                        }
+                    }
                 } else {
 
                     ArrayList<String> results = JobData.findAll(columnChoice);
@@ -61,9 +70,27 @@ public class TechJobs {
                 String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+                    ArrayList<HashMap<String,String>> all_result=JobData.findAll();
+                    for (Map<String,String>entry:all_result){
+                        if (entry.containsValue(searchTerm)){
+                            System.out.println("\n*****");
+                            for (String key :entry.keySet()){
+                                String value=entry.get(key);
+                                System.out.println(key+':'+value);
+                            }
+                        }
+                    }
+
                 } else {
-                    printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
+                    ArrayList<HashMap<String,String>>res_searchterm= JobData.findByColumnAndValue(searchField, searchTerm);
+                    for (Map<String,String>entry:res_searchterm){
+                        System.out.println("\n*****");
+                        for (String key :entry.keySet()){
+                            String value=entry.get(key);
+                            System.out.println(key+':'+value);
+                        }
+                    }
+
                 }
             }
         }
