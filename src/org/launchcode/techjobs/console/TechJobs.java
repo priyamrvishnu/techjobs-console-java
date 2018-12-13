@@ -1,9 +1,6 @@
 package org.launchcode.techjobs.console;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -51,7 +48,7 @@ public class TechJobs {
                 } else {
 
                     ArrayList<String> results = JobData.findAll(columnChoice);
-
+                    Collections.sort(results);
                     System.out.println("\n*** All " + columnChoices.get(columnChoice) + " Values ***");
 
                     // Print list of skills, employers, etc
@@ -69,28 +66,52 @@ public class TechJobs {
                 System.out.println("\nSearch term: ");
                 String searchTerm = in.nextLine();
 
+
                 if (searchField.equals("all")) {
-                    ArrayList<HashMap<String,String>> all_result=JobData.findAll();
-                    for (Map<String,String>entry:all_result){
-                        if (entry.containsValue(searchTerm)){
-                            System.out.println("\n*****");
-                            for (String key :entry.keySet()){
-                                String value=entry.get(key);
-                                System.out.println(key+':'+value);
+                    ArrayList<HashMap<String, String>> listing = new ArrayList<>();
+                    ArrayList<HashMap<String, String>> all_result = JobData.findAll();
+                    String low_searchterm =searchTerm.toLowerCase();
+                    for (HashMap<String, String> row : all_result) {
+                        for (String key : row.keySet()) {
+                            String value = row.get(key).toLowerCase();
+                            if (value.contains(low_searchterm)) {
+                                listing.add(row);
                             }
                         }
                     }
-
-                } else {
-                    ArrayList<HashMap<String,String>>res_searchterm= JobData.findByColumnAndValue(searchField, searchTerm);
-                    for (Map<String,String>entry:res_searchterm){
-                        System.out.println("\n*****");
-                        for (String key :entry.keySet()){
-                            String value=entry.get(key);
-                            System.out.println(key+':'+value);
+                    if (listing.isEmpty()) {
+                        System.out.println("No results matching ");
+                    } else {
+                        for (Map<String, String> entry : listing) {
+                            System.out.println("\n*****");
+                            for (String key : entry.keySet()) {
+                                String value = entry.get(key);
+                                System.out.println(key + ':' + value);
+                            }
+                        }
+                    }
+                }else {
+                    String low_searchterm =searchTerm.toLowerCase();
+                    ArrayList<HashMap<String,String>>res_searchterm= JobData.findByColumnAndValue(searchField, low_searchterm);
+                    ArrayList<HashMap<String, String>>field_search= new ArrayList<>();
+                    for (HashMap<String,String>row:res_searchterm){
+                        for (String key :row.keySet()){
+                            String value=row.get(key);
+                            field_search.add(row);
                         }
                     }
 
+                    if (field_search.isEmpty()) {
+                        System.out.println("No results matching ");
+                    }else {
+                        for (Map<String, String> entry : field_search) {
+                            System.out.println("\n*****");
+                            for (String key : entry.keySet()) {
+                                String value = entry.get(key);
+                                System.out.println(key + ':' + value);
+                            }
+                        }
+                    }
                 }
             }
         }
