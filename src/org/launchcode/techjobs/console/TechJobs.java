@@ -39,13 +39,7 @@ public class TechJobs {
                 if (columnChoice.equals("all")) {
 
                     ArrayList<HashMap<String,String>>allresult = JobData.findAll();
-                    for (Map<String,String>entry:allresult){
-                        System.out.println("\n*****");
-                        for (String key :entry.keySet()){
-                            String value=entry.get(key);
-                            System.out.println(key+':'+value);
-                        }
-                    }
+                    printJobs(allresult);
                 } else {
 
                     ArrayList<String> results = JobData.findAll(columnChoice);
@@ -70,37 +64,14 @@ public class TechJobs {
 
                 if (searchField.equals("all")) {
                     ArrayList<HashMap<String, String>> all_result = JobData.findByValue(searchTerm);
-
-                    if (all_result.isEmpty()) {
-                        System.out.println("No results matching ");
-                    } else {
-                        for (Map<String, String> entry : all_result) {
-                            System.out.println("\n*****");
-                            for (String key : entry.keySet()) {
-                                String value = entry.get(key);
-                                System.out.println(key + ':' + value);
-                            }
-                        }
-                    }
+                    printJobs(all_result);
                 }else {
                     ArrayList<HashMap<String,String>>res_searchterm= JobData.findByColumnAndValue(searchField, searchTerm);
-
-                    if (res_searchterm.isEmpty()) {
-                        System.out.println("No results matching ");
-                    }else {
-                        for (Map<String, String> entry : res_searchterm) {
-                            System.out.println("\n*****");
-                            for (String key : entry.keySet()) {
-                                String value = entry.get(key);
-                                System.out.println(key + ':' + value);
-                            }
-                        }
+                    printJobs(res_searchterm);
                     }
                 }
             }
         }
-    }
-
     // ﻿Returns the key of the selected item from the choices Dictionary
     private static String getUserSelection(String menuHeader, HashMap<String, String> choices) {
 
@@ -142,7 +113,17 @@ public class TechJobs {
 
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
-
-        System.out.println("printJobs is not implemented yet");
+        if (someJobs.isEmpty()){
+            System.out.println(" No Results Matching");
+        }
+        else {
+            for (Map<String, String> entry : someJobs) {
+                System.out.println("\n*****");
+                for (String key : entry.keySet()) {
+                    String value = entry.get(key);
+                    System.out.println(key + ':' + value);
+                }
+            }
+        }
     }
 }
